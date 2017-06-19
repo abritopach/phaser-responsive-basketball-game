@@ -31,6 +31,7 @@
 		TheGame.Boot.prototype =  {
 			init: function () {
 				this.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+
 			},
 			preload: function () {
 			},
@@ -85,12 +86,13 @@
 				// should load the one best fit according to the device resolution. Here we have simplified that work
 				// by simply choosing a background which will look fine even when stretched or squeezed.
 
+				console.log("TheGame.MainMenu.prototype");
+				console.log("*******************************************");
 				console.log("this.world.centerX: " + this.world.centerX);
 				console.log("this.world.centerY: " + this.world.centerY);
 				console.log("this.game.width: " + this.game.width);
 				console.log("this.game.height: " + this.game.height);
-
-
+				console.log("*******************************************");
 
 				this.background = this.add.image(0, 0, "background");
 				this.background.height = this.game.height;
@@ -151,12 +153,21 @@
 		};
 
 		TheGame.MyGame = function (game) {
+			console.log(game);
 		};
 
 		TheGame.MyGame.prototype = {
 			preload: function () {
 			},
 			create: function () {
+
+				console.log("TheGame.MyGame.prototype");
+				console.log("*******************************************");
+				console.log("this.world.centerX: " + this.world.centerX);
+				console.log("this.world.centerY: " + this.world.centerY);
+				console.log("this.game.width: " + this.game.width);
+				console.log("this.game.height: " + this.game.height);
+				console.log("*******************************************");
 
 				this.physics.startSystem(Phaser.Physics.P2JS);
 
@@ -185,7 +196,7 @@
 
 				/* Text */
 
-				current_score_text = this.game.add.text(this.world.centerX / 8, this.world.centerY / 8, 'Score: 0', { font: 'Arial', fontSize: '40px', fill: '#000', align: 'center' });
+				current_score_text = this.game.add.text(this.world.centerX / 8, this.world.centerY / 8, 'Score: 0', { font: 'Arial', fontSize: '40px', fill: '#FFF', align: 'center' });
 
 				// Position the controls using available width and height in the game
 				this.positionControls(this.game.width, this.game.height);
@@ -216,6 +227,7 @@
 				return ratio * currentDevicePixelRatio;
 			},
 			resize: function (width, height) {
+				console.log("resize called");
 				this.background.height = height;
 				this.background.width = width;
 				this.positionControls(width, height);
@@ -255,7 +267,9 @@
 					spawn.play();
 
 				} else {
-					console.log("isPortrait");
+					console.log("isPortrait: " + height / width);
+					console.log("this.world.centerX: " + this.world.centerX);
+					console.log("this.world.centerY: " + this.world.centerY);
 					console.log("width: " + width);
 					console.log("height: " + height);
 
@@ -280,7 +294,13 @@
 					ball.isBelowHoop = false;
 					spawn.play();
 
+					left_rim = this.game.add.sprite(this.world.centerX - (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 24), 'side rim');
+					this.scaleSprite(left_rim, this.world.centerX - (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 4), 50, 1);
+					right_rim = this.game.add.sprite(this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 24), 'side rim');
+					this.scaleSprite(right_rim, this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 4), 50, 1);
 
+
+					/*
 					var left_rim_x = this.world.centerX - ((this.hoop._frame.width * this.hoop.scale.x) / 2) + 130;
 					var right_rim_y = this.world.centerX + ((this.hoop._frame.width * this.hoop.scale.x) / 2) - 130;
 					left_rim = this.game.add.sprite(left_rim_x, (this.world.centerY - height / 3) + 80, 'side rim');
@@ -288,6 +308,7 @@
 
 					this.scaleSprite(left_rim, width, height / 2, 50, 3);
 					this.scaleSprite(right_rim, width, height / 2, 50, 3);
+					 */
 
 					this.physics.p2.enable([ left_rim, right_rim], false);
 
@@ -300,6 +321,7 @@
 					right_rim.body.static = true;
 					right_rim.body.setCollisionGroup(collisionGroup);
 					right_rim.body.collides([collisionGroup]);
+
 
 				}
 			},
@@ -356,8 +378,9 @@
 			update: function() {
 
 				if (ball && ball.body.velocity.y > 0) {
-					//front_rim = this.game.add.sprite(window.innerWidth / 2, this.game.height / 3, 'front rim');
-					//this.scaleSprite(front_rim, this.game.width, this.game.height / 3, 50, 2);
+					front_rim = this.game.add.sprite(this.world.centerX, (this.world.centerY - this.game.height / 3) + (this.game.height / 24), 'front rim');
+					front_rim.position.x = front_rim.position.x - front_rim._frame.width - 40;
+					this.scaleSprite(front_rim, this.world.centerX, (this.world.centerY - this.game.height / 3), 50, 1);
 					ball.body.collides([collisionGroup], this.hitRim, this);
 				}
 
@@ -366,35 +389,16 @@
 					ball.body.collideWorldBounds = false;
 					var rand = Math.floor(Math.random() * 5);
 					console.log("ball.body.x: " + ball.body.x);
-					if (ball.body.x > 450 && ball.body.x < 500) {
+					if (ball.body.x > this.world.centerX - 20 && ball.body.x < this.world.centerX + 20) {
 						console.log("ball.body.y: " + ball.body.y);
-						//emojiName = "win" + rand;
 						setTimeout(function() {
 							score_sound.play();
 							current_score += 1;
 							current_score_text.text = "Score: " +  current_score;
 						}, 500);
 					} else {
-						//emojiName = "lose" + rand;
 						fail.play();
-						/*
-						if (current_score > high_score) {
-							high_score = current_score;
-							high_score_text.text = 'High Score\n' + high_score;
-						}
-						*/
-						//current_score = 0;
-						//current_score_text.text = '';
-						//current_best_text.text = 'Current Best';
-						//current_best_score_text.text = high_score;
 					}
-					/*
-					emoji = game.add.sprite(180, 100, emojiName);
-					emoji.scale.setTo(0.25, 0.25);
-					moveInTween = game.add.tween(emoji).from( { y: 150 }, 500, Phaser.Easing.Elastic.Out, true);
-					fadeInTween = game.add.tween(emoji).from( { alpha: 0 }, 200, Phaser.Easing.Linear.None, true, 0, 0, false);
-					moveInTween.onComplete.add(tweenOut, this);
-					*/
 				}
 
 				//console.log("ball.body.y: " + ball.body.y);
