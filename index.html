@@ -4,11 +4,7 @@
 	<meta charset="UTF-8" />
 	<title>Responsive Basketball Game</title>
 	<script type="text/javascript" src="js/phaser.min.js"></script>
-    <style type="text/css">
-        body {
-            margin: 0;
-        }
-    </style>
+	<link rel="stylesheet" href="css/style.css" />
     <script type="text/javascript">
 
 
@@ -266,6 +262,26 @@
 					ball.launched = false;
 					ball.isBelowHoop = false;
 					spawn.play();
+
+					/*
+					left_rim = this.game.add.sprite(this.world.centerX - (this.world.centerX / 4.5), this.world.centerY, 'side rim');
+					this.scaleSprite(left_rim, this.world.centerX - (this.world.centerX / 4.5), this.world.centerY, 50, 2);
+					right_rim = this.game.add.sprite(this.world.centerX + (this.world.centerX / 4.5), this.world.centerY, 'side rim');
+					this.scaleSprite(right_rim, this.world.centerX + (this.world.centerX / 4.5), this.world.centerY, 50, 2);
+
+					this.physics.p2.enable([ left_rim, right_rim], false);
+
+					left_rim.body.setCircle(2.5);
+					left_rim.body.static = true;
+					left_rim.body.setCollisionGroup(collisionGroup);
+					left_rim.body.collides([collisionGroup]);
+
+					right_rim.body.setCircle(2.5);
+					right_rim.body.static = true;
+					right_rim.body.setCollisionGroup(collisionGroup);
+					right_rim.body.collides([collisionGroup]);
+					*/
+
 
 				} else {
 					console.log("isPortrait: " + height / width);
