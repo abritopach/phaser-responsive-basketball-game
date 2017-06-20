@@ -239,9 +239,9 @@
 				isLandscape = height / width  < 1.3 ? true: false;
 				if(isLandscape) {
 					console.log("positionControls isLandscape");
-					this.hoop = this.game.add.image(this.world.centerX, this.world.centerY - height / 3  + 110, "hoop");
+					this.hoop = this.game.add.image(this.world.centerX, this.world.centerY - (height * 0.1), "hoop");
 					this.hoop.anchor.setTo(0.5);
-					this.scaleSprite(this.hoop, width, height / 3, 50, 2);
+					this.scaleSprite(this.hoop, width, height, 50, 0.8);
 
 					// Create ball.
 
@@ -255,6 +255,26 @@
 					ball.launched = false;
 					ball.isBelowHoop = false;
 					spawn.play();
+
+					left_rim = this.game.add.sprite(this.world.centerX, this.world.centerY, 'side rim');
+					this.scaleSprite(left_rim, width, height, 50, 2);
+
+					/*
+					right_rim = this.game.add.sprite(this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 24), 'side rim');
+					this.scaleSprite(right_rim, this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 4), 50, 2);
+
+					this.physics.p2.enable([ left_rim, right_rim], false);
+
+					left_rim.body.setCircle(2.5);
+					left_rim.body.static = true;
+					left_rim.body.setCollisionGroup(collisionGroup);
+					left_rim.body.collides([collisionGroup]);
+
+					right_rim.body.setCircle(2.5);
+					right_rim.body.static = true;
+					right_rim.body.setCollisionGroup(collisionGroup);
+					right_rim.body.collides([collisionGroup]);
+					*/
 
 
 				} else {
