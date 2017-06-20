@@ -149,7 +149,6 @@
 		};
 
 		TheGame.MyGame = function (game) {
-			console.log(game);
 		};
 
 		TheGame.MyGame.prototype = {
@@ -223,7 +222,6 @@
 				return ratio * currentDevicePixelRatio;
 			},
 			resize: function (width, height) {
-				console.log("resize called");
 				this.background.height = height;
 				this.background.width = width;
 				this.positionControls(width, height);
@@ -240,12 +238,7 @@
 				// Pick any value you like if you have a different preference for landscape or portrait orientation
 				isLandscape = height / width  < 1.3 ? true: false;
 				if(isLandscape) {
-					console.log("isLandscape");
-					console.log("this.world.centerX: " + this.world.centerX);
-					console.log("this.world.centerY: " + this.world.centerY);
-					console.log("width: " + width);
-					console.log("height: " + height);
-
+					console.log("positionControls isLandscape");
 					this.hoop = this.game.add.image(this.world.centerX, this.world.centerY - height / 3  + 110, "hoop");
 					this.hoop.anchor.setTo(0.5);
 					this.scaleSprite(this.hoop, width, height / 3, 50, 2);
@@ -254,7 +247,7 @@
 
 					ball = this.game.add.sprite(this.world.centerX, this.world.centerY + (height / 3), "ball");
 					//this.ball.anchor.setTo(0.5);
-					this.scaleSprite(ball, this.world.centerX, this.world.centerY + (height / 3), 50, 0.3);
+					this.scaleSprite(ball, width, height / 3, 50, 0.6);
 					//this.game.add.tween(this.ball.scale).from({x : 0.7, y : 0.7}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
 					this.game.physics.p2.enable(ball, false);
 
@@ -263,40 +256,12 @@
 					ball.isBelowHoop = false;
 					spawn.play();
 
-					/*
-					left_rim = this.game.add.sprite(this.world.centerX - (this.world.centerX / 4.5), this.world.centerY, 'side rim');
-					this.scaleSprite(left_rim, this.world.centerX - (this.world.centerX / 4.5), this.world.centerY, 50, 2);
-					right_rim = this.game.add.sprite(this.world.centerX + (this.world.centerX / 4.5), this.world.centerY, 'side rim');
-					this.scaleSprite(right_rim, this.world.centerX + (this.world.centerX / 4.5), this.world.centerY, 50, 2);
-
-					this.physics.p2.enable([ left_rim, right_rim], false);
-
-					left_rim.body.setCircle(2.5);
-					left_rim.body.static = true;
-					left_rim.body.setCollisionGroup(collisionGroup);
-					left_rim.body.collides([collisionGroup]);
-
-					right_rim.body.setCircle(2.5);
-					right_rim.body.static = true;
-					right_rim.body.setCollisionGroup(collisionGroup);
-					right_rim.body.collides([collisionGroup]);
-					*/
-
 
 				} else {
-					console.log("isPortrait: " + height / width);
-					console.log("this.world.centerX: " + this.world.centerX);
-					console.log("this.world.centerY: " + this.world.centerY);
-					console.log("width: " + width);
-					console.log("height: " + height);
-
+					console.log("positionControls isPortrait");
 					this.hoop = this.game.add.image(this.world.centerX, this.world.centerY - height / 3, "hoop");
 					this.hoop.anchor.setTo(0.5);
 					this.scaleSprite(this.hoop, width, height / 3, 50, 1);
-
-					console.log(this.hoop);
-					console.log("this.hoop.width: " + this.hoop._frame.width * this.hoop.scale.x);
-					console.log("this.hoop.height: " + this.hoop._frame.height * this.hoop.scale.y);
 
 					// Create ball.
 
@@ -316,17 +281,6 @@
 					right_rim = this.game.add.sprite(this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 24), 'side rim');
 					this.scaleSprite(right_rim, this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 4), 50, 2);
 
-
-					/*
-					var left_rim_x = this.world.centerX - ((this.hoop._frame.width * this.hoop.scale.x) / 2) + 130;
-					var right_rim_y = this.world.centerX + ((this.hoop._frame.width * this.hoop.scale.x) / 2) - 130;
-					left_rim = this.game.add.sprite(left_rim_x, (this.world.centerY - height / 3) + 80, 'side rim');
-					right_rim = this.game.add.sprite(right_rim_y, (this.world.centerY - height / 3) + 80, 'side rim');
-
-					this.scaleSprite(left_rim, width, height / 2, 50, 3);
-					this.scaleSprite(right_rim, width, height / 2, 50, 3);
-					 */
-
 					this.physics.p2.enable([ left_rim, right_rim], false);
 
 					left_rim.body.setCircle(2.5);
@@ -343,20 +297,16 @@
 				}
 			},
 			click: function(pointer) {
-				console.log("Click function");
-				console.log(ball.body);
 				var bodies = this.game.physics.p2.hitTest(pointer.position, [ ball.body ]);
 				if (bodies.length) {
 					start_location = [pointer.x, pointer.y];
 					isDown = true;
 					location_interval = setInterval(function () {
 						start_location = [pointer.x, pointer.y];
-						console.log(start_location);
 					}.bind(this), 200);
 				}
 			},
 			release: function(pointer) {
-				console.log("Release function");
 				if (isDown) {
 					window.clearInterval(location_interval);
 					isDown = false;
@@ -367,27 +317,23 @@
 						var x_traj = -2300 * slope[0] / slope[1];
 						this.launch(x_traj);
 					}
-					console.log(end_location);
 				}
 			},
 			launch: function(x_traj) {
-
-				console.log("x_traj: " + x_traj);
-
 				if (ball.launched === false) {
 					ball.body.setCircle(36);
 					ball.body.setCollisionGroup(collisionGroup);
 					ball.launched = true;
 					if (isLandscape) {
-						this.game.physics.p2.gravity.y = 3500;
-						this.game.add.tween(ball.scale).to({x : 0.2, y : 0.2}, 500, Phaser.Easing.Linear.None, true, 0, 0, false);
+						this.game.physics.p2.gravity.y = 3000;
+						this.game.add.tween(ball.scale).to({x : 0.15, y : 0.15}, 500, Phaser.Easing.Linear.None, true, 0, 0, false);
 					}
-					else
-					{
-						this.game.physics.p2.gravity.y = 1500/*3000*/;
-						this.game.add.tween(ball.scale).to({x : 0.45, y : 0.45}, 500, Phaser.Easing.Linear.None, true, 0, 0, false);
+					else  {
+						this.game.physics.p2.gravity.y = 1500; //3000
+						this.game.add.tween(ball.scale).to({x : 0.35, y : 0.35}, 500, Phaser.Easing.Linear.None, true, 0, 0, false);
 					}
-					//this.scaleSprite(ball, this.game.width, this.game.height / 2, 50, 0.3);
+					this.scaleSprite(ball, this.game.width, this.game.height / 2, 50, 0.3);
+
 					ball.body.velocity.x = x_traj;
 					ball.body.velocity.y = -1750;
 					ball.body.rotateRight(x_traj / 3);
@@ -396,6 +342,7 @@
 
 			},
 			hitRim: function() {
+				console.log("Collision");
 				backboard.play();
 			},
 			update: function() {
@@ -405,17 +352,17 @@
 					front_rim = this.game.add.sprite(this.world.centerX, (this.world.centerY - this.game.height / 3) + (this.game.height / 24), 'front rim');
 					front_rim.position.x = front_rim.position.x - front_rim._frame.width - 40;
 					this.scaleSprite(front_rim, this.world.centerX, (this.world.centerY - this.game.height / 3), 50, 1);
+					 */
 					ball.body.collides([collisionGroup], this.hitRim, this);
-					*/
 				}
 
 				if (ball && ball.body.velocity.y > 0 && ball.body.y > 150 && !ball.isBelowHoop) {
 					ball.isBelowHoop = true;
 					ball.body.collideWorldBounds = false;
 					var rand = Math.floor(Math.random() * 5);
-					console.log("ball.body.x: " + ball.body.x);
-					if (ball.body.x > this.world.centerX - 20 && ball.body.x < this.world.centerX + 20) {
-						console.log("ball.body.y: " + ball.body.y);
+					var lowerx = this.world.centerX - 20;
+					var upperx = this.world.centerX + 20;
+					if (ball.body.x > lowerx && ball.body.x < upperx) {
 						setTimeout(function() {
 							score_sound.play();
 							current_score += 1;
@@ -426,7 +373,6 @@
 					}
 				}
 
-				//console.log("ball.body.y: " + ball.body.y);
 				if (ball && ball.body.y > 2000) {
 					this.game.physics.p2.gravity.y = 0;
 					ball.kill();
@@ -435,7 +381,7 @@
 						// Create ball.
 						ball = this.game.add.sprite(this.world.centerX, this.world.centerY + (this.game.height / 3), "ball");
 						//this.ball.anchor.setTo(0.5);
-						this.scaleSprite(ball, this.game.width, this.game.height / 2, 50, 0.3);
+						this.scaleSprite(ball, this.game.width, this.game.height / 3, 50, 0.6);
 						//this.game.add.tween(this.ball.scale).from({x : 0.7, y : 0.7}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
 						this.game.physics.p2.enable(ball, false);
 
@@ -449,7 +395,7 @@
 						ball = this.game.add.sprite(this.world.centerX, this.world.centerY, "ball");
 						//this.ball.anchor.setTo(0.5);
 						this.scaleSprite(ball, this.game.width, this.game.height / 2, 50, 0.3);
-						//this.game.add.tween(this.ball.scale).from({x : 0.7, y : 0.7}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
+						//this.game.add.tween(ball.scale).from({x : 0.2, y : 0.2}, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
 						this.game.physics.p2.enable(ball, false);
 
 						ball.body.setCircle(60); // NOTE: Goes from 60 to 36
@@ -479,7 +425,7 @@
 
 		window.onload = function () {
 
-			//Create a new game that fills the screen
+			// Create a new game that fills the screen.
 
 			mygame = new Phaser.Game(window.innerWidth * window.devicePixelRatio/*TheGame.Params.baseWidth*/, window.innerHeight * window.devicePixelRatio/*TheGame.Params.baseHeight*/, Phaser.CANVAS);
 
