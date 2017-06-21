@@ -256,12 +256,10 @@
 					ball.isBelowHoop = false;
 					spawn.play();
 
-					left_rim = this.game.add.sprite(this.world.centerX, this.world.centerY, 'side rim');
+					left_rim = this.game.add.sprite(this.world.centerX - (width / 10), this.world.centerY - 5, 'side rim');
 					this.scaleSprite(left_rim, width, height, 50, 2);
-
-					/*
-					right_rim = this.game.add.sprite(this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 24), 'side rim');
-					this.scaleSprite(right_rim, this.world.centerX + (this.world.centerX / 4.5), (this.world.centerY - height / 3) + (height / 4), 50, 2);
+					right_rim = this.game.add.sprite(this.world.centerX + (width / 10), this.world.centerY - 5, 'side rim');
+					this.scaleSprite(right_rim, width, height, 50, 2);
 
 					this.physics.p2.enable([ left_rim, right_rim], false);
 
@@ -274,7 +272,6 @@
 					right_rim.body.static = true;
 					right_rim.body.setCollisionGroup(collisionGroup);
 					right_rim.body.collides([collisionGroup]);
-					*/
 
 
 				} else {
